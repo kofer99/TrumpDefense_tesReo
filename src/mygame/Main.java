@@ -319,16 +319,16 @@ public class Main extends SimpleApplication {
                     // Let's interact - we mark the hit with a red dot.
                     if ("cube".equals(peter)) {
 
-                     /*   for (int i = (int) (-fsq.getWidth() / 2); i < (int) (fsq.getWidth() / 2); i++) {
-                            for (int j = (int) (-fsq.getHeight() / 2); j < (int) (fsq.getHeight() / 2); j++) {*/
-                 //    Vector3f position = new Vector3f(i,j,closest.getContactPoint().getZ()); //closest.getContactPoint();
-                           Vector3f position = closest.getContactPoint();
+                        for (int i = (int) (-fsq.getWidth() / 2); i < (int) (fsq.getWidth() / 2); i++) {
+                            for (int j = (int) (-fsq.getHeight() / 2); j < (int) (fsq.getHeight() / 2); j++) {
+                    Vector3f position = new Vector3f(i,j,closest.getContactPoint().getZ()); //closest.getContactPoint();
+                        //   Vector3f position = closest.getContactPoint();
                     //    if (map.towerplace(position, fsq) == true) {
-                           map.towerplace(position, fsq);
+                       if(map.towerplace(position, fsq)== true){
                             cubes.attachChild(createBox(position));
-                    //    } else {
-                     //   }
-
+                       } else {
+                        }
+                            }}
                         //shootables.attachChild(cubes);
                         //shootables.attachChild(player = createBox(closest.getContactPoint()));
                         peter = "nichts";
