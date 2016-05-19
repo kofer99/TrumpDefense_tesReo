@@ -177,7 +177,7 @@ public class TdMap {
     }
 
     public boolean towerplace(Vector3f mousePosition, Quad rat, Vector2f size) {
-        int max = (int) size.getX();
+        int max = (int) size.getX()*2;
         boolean ret = true;
         float ratiox = getWidth() / rat.getWidth();
         float ratioy = getHeight() / rat.getHeight();

@@ -9,13 +9,20 @@ import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
+import com.jme3.scene.shape.Box;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,10 +36,12 @@ public class CubeControl extends AbstractControl {
     private Vector3f dist;
     private Vector3f playerDirection;
     private Spatial temp;
+    private Node projectiles;
 
-    public CubeControl(Node player) {
+    public CubeControl(Node player,AssetManager assetManager,Node projectiles) {
         this.player = player;
-
+        this.assetManager = assetManager;
+        this.projectiles = projectiles;
         dist = new Vector3f(0, 0, 0);
 
 
@@ -42,21 +51,38 @@ public class CubeControl extends AbstractControl {
     protected void controlUpdate(float tpf) {
         if (player.getQuantity() > 0) {
             for (int i = 0; i < player.getQuantity(); i++) {
-                Spatial temp = player.getChild(i);
+                 temp = player.getChild(i);
                 if (temp.getLocalTranslation().distance(spatial.getLocalTranslation()) < 5f) {
                     /*      Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                      mat.setColor("Color", ColorRGBA.randomColor());
                      spatial.setMaterial(mat);*/
                     //Spatial temps = temp.clone();
                     
-                    temp.removeFromParent();
+                   // temp.removeFromParent();
 
                     // temp.removeFromParent();
+                    shoot();
+                  
+                  
                 }
             }
 
 
         }
+      
+    }
+    public Geometry createBox(Vector3f as) {
+        Box b = new Box(0.1f, 0.1f, 0.1f);
+        Geometry boxs = new Geometry("Box", b);
+
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.Blue);
+       // boxs.setUserData("Size", new Vector2f(b.getXExtent(),b.getYExtent()));
+        boxs.setMaterial(mat);
+        boxs.setLocalTranslation(as);
+        boxs.addControl(new ProjectileControl(temp));
+        //   rootNode.attachChild(player);
+        return boxs;
     }
 
     @Override
@@ -79,5 +105,9 @@ public class CubeControl extends AbstractControl {
         OutputCapsule out = ex.getCapsule(this);
         //TODO: save properties of this Control, e.g.
         //out.write(this.value, "name", defaultValue);
+    }
+
+    private void shoot() {
+          projectiles.attachChild(createBox(spatial.getLocalTranslation()));
     }
 }

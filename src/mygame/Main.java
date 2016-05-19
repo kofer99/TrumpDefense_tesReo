@@ -60,6 +60,7 @@ public class Main extends SimpleApplication {
     private int sphere_nr = 0;
     private float speedFactor_Ball = 30f;
     private TdMap map;
+    public Node projecttiles;
 
     @Override
     public void simpleInitApp() {
@@ -97,6 +98,8 @@ public class Main extends SimpleApplication {
         hellosText.setLocalTranslation(300, helloText.getLineHeight(), 0);
         guiNode.attachChild(hellosText);
         hellosText.setColor(ColorRGBA.Blue);
+        projecttiles = new Node();
+        shootables.attachChild(projecttiles);
         shootables.attachChild(makeFloor());
         shootables.attachChild(spheres);
         shootables.attachChild(cubes);
@@ -128,7 +131,7 @@ public class Main extends SimpleApplication {
         boxs.setUserData("Size", new Vector2f(b.getXExtent(),b.getYExtent()));
         boxs.setMaterial(mat);
         boxs.setLocalTranslation(as);
-        boxs.addControl(new CubeControl(spheres));
+       
         //   rootNode.attachChild(player);
         return boxs;
     }
@@ -319,19 +322,20 @@ public class Main extends SimpleApplication {
                     // Let's interact - we mark the hit with a red dot.
                     if ("cube".equals(peter)) {
 
-                        for (int i = (int) (-fsq.getWidth() / 2); i < (int) (fsq.getWidth() / 2); i++) {
-                            for (int j = (int) (-fsq.getHeight() / 2); j < (int) (fsq.getHeight() / 2); j++) {
-                                Vector3f position = new Vector3f(i, j, closest.getContactPoint().getZ()); //closest.getContactPoint();
+                       // for (int i = (int) (-fsq.getWidth() / 2); i < (int) (fsq.getWidth() / 2); i++) {
+                        //    for (int j = (int) (-fsq.getHeight() / 2); j < (int) (fsq.getHeight() / 2); j++) {
+                                Vector3f position = closest.getContactPoint();//new Vector3f(i, j, closest.getContactPoint().getZ()); 
                                 //   Vector3f position = closest.getContactPoint();
                                 //    if (map.towerplace(position, fsq) == true) {
                                 Geometry cube = createBox(position);
                                 if (map.towerplace(position, fsq, (Vector2f) cube.getUserData("Size")) == true) {
                                     cubes.attachChild(cube);
+                                    cube.addControl(new CubeControl(spheres,assetManager,projecttiles));
                                 } else {
                                     cube.removeFromParent();
                                 }
-                            }
-                        }
+                            
+                        
                         //shootables.attachChild(cubes);
                         //shootables.attachChild(player = createBox(closest.getContactPoint()));
                         peter = "nichts";
